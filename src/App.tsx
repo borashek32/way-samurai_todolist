@@ -1,28 +1,50 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
-import {TodoList} from "./TodoList";
+import {Todolist} from './Todolist';
 
 function App() {
-    let currentTitle1 = "What to do";
 
-    const tasks1 = [
-        { id: 1, title: "HTML&CSS", isDone: true },
-        { id: 2, title: "JS", isDone: true },
-        { id: 3, title: "ReactJS", isDone: false }
-    ];
-    const tasks2 = [
-        { id: 1, title: "Hello world", isDone: true },
-        { id: 2, title: "I am Happy", isDone: false },
-        { id: 3, title: "Yo", isDone: false },
-        { id: 3, title: "Yo", isDone: false }
-    ];
+    let [tasks1, setTasks1] = useState([
+        {id: 1, title: "HTML&CSS", isDone: true}, //0
+        {id: 2, title: "JS", isDone: true},//1
+        {id: 3, title: "ReactJS", isDone: false},
+        {id: 4, title: "HTML&CSS1", isDone: true}, //0
+        {id: 5, title: "JS1", isDone: true},//1
+        {id: 6, title: "ReactJS1", isDone: false}
+    ])
+
+    const [filterValueKey,setFilterValueKey]=useState('All')
+
+    const removeTask = (taskID: number) => {
+        setTasks1(tasks1.filter(el => el.id !== taskID))
+    }
+
+    const filterTasks = (filterKey: string) => {
+        setFilterValueKey(filterKey)
+    }
+
+    const FooFilter = () => {
+        let filteredTasks = tasks1
+        if(filterValueKey === 'Active'){
+            filteredTasks = tasks1.filter(el => !el.isDone)
+        }
+        if(filterValueKey === 'Completed') {
+            filteredTasks = tasks1.filter(el => el.isDone)
+        }
+        return filteredTasks;
+    }
 
     return (
         <div className="App">
-            <TodoList title={currentTitle1} tasks={tasks1} />
-            <TodoList title={"What to say"} tasks={tasks2} />
+            <Todolist
+                title="What to learn"
+                tasks={FooFilter()}
+                removeTask={removeTask}
+                filterTasks={filterTasks}
+            />
         </div>
     );
 }
 
 export default App;
+
